@@ -7,6 +7,8 @@ class MilestoneController{
     create = async(req, res, next)=>{
         try {
             const data = req.body;
+            console.log(`body: ${data}`);
+            console.log(data);
             new CREATED({
                 message: 'A new milestone has been created!',
                 metaData: await MilestoneService.create(data)

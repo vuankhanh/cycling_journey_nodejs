@@ -4,57 +4,30 @@ const milestoneModel = require('../models/milestone.model');
 
 class MilestoneService {
     static create = async (data)=>{
-        console.log('creating...');
         try {
             const milestone = new milestoneModel(data);
             await milestone.save();
-            console.log(milestone);
-            return {
-                code: 'xxxx',
-                message: '',
-                metadata: milestone
-            }
+            return milestone
         } catch (error) {
-            console.error(error);
-            return {
-                code: 'xxx',
-                message: error.message,
-                status: 'error'
-            }
+            return error;
         }
     }
 
     static getAll = async ()=>{
         try {
             const milestones = await milestoneModel.find().lean();
-            return {
-                code: 'xxxx',
-                message: '',
-                metadata: milestones
-            }
+            return milestones
         } catch (error) {
-            return {
-                code: 'xxx',
-                message: error.message,
-                status: 'error'
-            }
+            return error;
         }
     }
 
     static getDetail = async (id)=>{
         try {
             const milestone = await milestoneModel.findOne(id).lean();
-            return {
-                code: 'xxxx',
-                message: '',
-                metadata: milestone
-            }
+            return  milestone
         } catch (error) {
-            return {
-                code: 'xxx',
-                message: error.message,
-                status: 'error'
-            }
+            return error;
         }
     }
 
@@ -62,51 +35,27 @@ class MilestoneService {
         try {
 
             const milestone = await milestoneModel.findOneAndReplace(id);
-            return {
-                code: 'xxxx',
-                message: '',
-                metadata: milestone
-            }
+            return milestone
         } catch (error) {
-            return {
-                code: 'xxx',
-                message: error.message,
-                status: 'error'
-            }
+            return error;
         }
     }
 
     static modify = async (id, data)=>{
         try {
             const milestone = await milestoneModel.findOneAndUpdate(id);
-            return {
-                code: 'xxxx',
-                message: '',
-                metadata: milestone
-            }
+            return milestone
         } catch (error) {
-            return {
-                code: 'xxx',
-                message: error.message,
-                status: 'error'
-            }
+            return error;
         }
     }
 
     static remove = async (id, data)=>{
         try {
             const milestone = await milestoneModel.findOneAndRemove(id);
-            return {
-                code: 'xxxx',
-                message: '',
-                metadata: milestone
-            }
+            return milestone
         } catch (error) {
-            return {
-                code: 'xxx',
-                message: error.message,
-                status: 'error'
-            }
+            return error;
         }
     }
 }

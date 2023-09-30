@@ -19,7 +19,7 @@ const milestoneSchema = new mongoose.Schema({
     numericalOrder: {
         type: Number,
         required: true,
-        default: 0
+        unique: true
     },
     name: {
         type: String,

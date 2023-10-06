@@ -11,7 +11,7 @@ const ReasonStatusCode = {
 }
 
 class SuccessRespone {
-    constructor({ statusCode = StatusCode.OK, message, reasonStatusCode = ReasonStatusCode.OK, metaData = {} }){
+    constructor({ statusCode = StatusCode.OK, message, reasonStatusCode = ReasonStatusCode.OK, metaData = null }){
         this.message = !message ? reasonStatusCode : message;
         this.status = statusCode;
         this.metaData = metaData;

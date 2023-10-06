@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const enumType = ['IMG', 'VIDEO'];
+const enumType = ['image', 'video'];
 
 const mediaSchema = new mongoose.Schema({
     url: {
@@ -16,22 +16,21 @@ const mediaSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     caption: {
-        type: String,
-        required: true
+        type: String
     },
     alternateName: {
-        type: String,
-        required: true
+        type: String
     },
     type: {
         type: String,
         enum: enumType,
         required: true
     }
+}, {
+    timestamps: true
 });
 
 const albumSchema = new mongoose.Schema({
@@ -42,9 +41,22 @@ const albumSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    route: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    thumbnail: {
+        type: String,
+        required: true
+    },
     media: [{
         type: mediaSchema
     }]
-})
+}, {
+    timestamps: true,
+    collection: 'album'
+}
+)
 
 module.exports = mongoose.model("AlbumImage", albumSchema);

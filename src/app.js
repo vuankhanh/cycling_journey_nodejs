@@ -3,6 +3,7 @@ const compression = require('compression');
 const express = require('express');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
+const localPathConfig = require('./configs/local_dir');
 
 const app = express();
 
@@ -18,7 +19,6 @@ require('./dbs/init.mongodb');
 
 // init routes
 app.use('/api', require('./routes'));
-
+app.use('/static', express.static(localPathConfig.album))
 // handle error
-
 module.exports = app;

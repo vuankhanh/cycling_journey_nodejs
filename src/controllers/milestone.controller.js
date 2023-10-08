@@ -32,7 +32,10 @@ class MilestoneController{
         try {
             const id = req.params.id;
             console.log(`id: ${id}`);
-            return res.status(200).json(await MilestoneService.getDetail(id));
+            new OK({
+                message: 'success',
+                metaData: await MilestoneService.getDetail(id)
+            }).send(res);
         } catch (error) {
             next(error)
         }

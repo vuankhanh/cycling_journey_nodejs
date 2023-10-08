@@ -3,11 +3,11 @@
 const mongoose = require('mongoose');
 
 const coordinates = new mongoose.Schema({
-    latitude: {
+    lat: {
         type: Number,
         required: true,
     },
-    longitude: {
+    lng: {
         type: Number,
         required: true,
     }
@@ -29,7 +29,17 @@ const milestoneSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    coordinates: coordinates
+    dateTime: {
+        type: Date,
+        required: true
+    },
+    coordinates: coordinates,
+    albumId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'schema_album',
+        required: false,
+        default: null
+    }
 }, {
     timestamps: true,
     collection: 'milestone'

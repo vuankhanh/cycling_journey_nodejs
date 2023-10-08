@@ -9,6 +9,7 @@ class MilestoneService {
             await milestone.save();
             return milestone
         } catch (error) {
+            console.error(error);
             return error;
         }
     }
@@ -24,8 +25,8 @@ class MilestoneService {
 
     static getDetail = async (id)=>{
         try {
-            const milestone = await milestoneModel.findOne(id).lean();
-            return  milestone
+            const milestone = await milestoneModel.findById(id).populate('albumId');
+            return milestone
         } catch (error) {
             return error;
         }

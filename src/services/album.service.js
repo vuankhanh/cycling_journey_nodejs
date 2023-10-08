@@ -7,7 +7,23 @@ class AlbumService {
         try {
             const album = new albumModel(data);
             await album.save();
-            return album
+            const conditional = { _id: album._id };
+            const albumsAggregate = await albumModel.aggregate(
+                [
+                    {
+                        $match: conditional
+                    }, {
+                        $addFields: {
+                            mediaItems: { $sum: { $size: "$media" } }
+                        }
+                    }, {
+                        $limit: 1
+                    }
+                ]
+            ).then(res=>{
+                return res[0]
+            });
+            return albumsAggregate;
         } catch (error) {
             return error;
         }

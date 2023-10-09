@@ -64,7 +64,8 @@ class MilestoneController{
             const id = req.params.id;
             const data = req.body;
             if(!data){
-
+                const error = new BadRequestError(err.message, 400)
+                next(error)
             }
             new OK({
                 message: 'success',

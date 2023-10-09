@@ -10,7 +10,7 @@ const replaceToVietnamese = require('../helpers/replace.to.vietnamese');
 
 const multipleUploadMiddleware = require("../middlewares/multiple.upload.middleware");
 const { BadRequestError } = require('../core/error.response');
-
+const mongoose = require('mongoose');
 class AlbumController{
     create = async(req, res, next)=>{
         const query = req.query;
@@ -95,10 +95,18 @@ class AlbumController{
 
     getDetail = async(req, res, next)=>{
         try {
-            const route = req.params.route;
+            const route = req.query.route;
+            const id = req.query.id;
+            const conditional = {};
+            if(route){
+                conditional.route = route;
+            }else{
+                conditional._id = new mongoose.Types.ObjectId(id)
+            }
+
             new OK({
                 message: 'success',
-                metaData: await AlbumService.getDetail(route)
+                metaData: await AlbumService.getDetail(conditional)
             }).send(res);
         } catch (err) {
             const error = new BadRequestError(err.message, 400)
@@ -108,7 +116,7 @@ class AlbumController{
 
     replace = async(req, res, next)=>{
         try {
-            req.params.id
+            const id = req.params.id;
             return res.status(200).json(await AlbumService.replace());
         } catch (err) {
             const error = new BadRequestError(err.message, 400)
@@ -118,7 +126,7 @@ class AlbumController{
 
     modify = async(req, res, next)=>{
         try {
-            req.params.id
+            const id = req.params.id;
             return res.status(200).json(await AlbumService.modify());
         } catch (err) {
             const error = new BadRequestError(err.message, 400)
@@ -128,7 +136,7 @@ class AlbumController{
 
     delete = async(req, res, next)=>{
         try {
-            req.params.id
+            const id = req.params.id;
             return res.status(200).json(await AlbumService.remove());
         } catch (err) {
             const error = new BadRequestError(err.message, 400)

@@ -29,7 +29,7 @@ class MilestoneService {
 
     static replace = async (id, data)=>{
         try {
-            const milestone = await milestoneModel.findByIdAndReplace(id, data);
+            const milestone = await milestoneModel.findByIdAndUpdate(id, data, { new: true });
             return milestone;
         } catch (error) {
             return error;
@@ -37,12 +37,12 @@ class MilestoneService {
     }
 
     static modify = async (id, data)=>{
-        const milestone = await milestoneModel.findByIdAndUpdate(id, data);
-        return milestone
+        const milestone = await milestoneModel.findByIdAndUpdate(id, data, { new: true });
+        return milestone;
     }
 
-    static remove = async (id, data)=>{
-        const milestone = await milestoneModel.findOneAndRemove(id);
+    static remove = async (id)=>{
+        const milestone = await milestoneModel.findByIdAndRemove(id);
         return milestone
     }
 }

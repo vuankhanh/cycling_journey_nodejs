@@ -61,9 +61,8 @@ class AlbumService {
         }
     }
 
-    static getDetail = async (route) => {
+    static getDetail = async (conditional) => {
         try {
-            const conditional = { route };
             const albumsAggregate = await albumModel.aggregate(
                 [
                     {
@@ -80,7 +79,6 @@ class AlbumService {
                 return res[0]
             });
 
-            const album = await albumModel.findOne(conditional);
             return albumsAggregate;
         } catch (error) {
             return error;
@@ -89,8 +87,7 @@ class AlbumService {
 
     static replace = async (id, data) => {
         try {
-
-            const album = await albumModel.findOneAndReplace(id);
+            const album = await albumModel.findByIdAndUpdate(id, data, { new: true });
             return album
         } catch (error) {
             return error;
@@ -99,16 +96,16 @@ class AlbumService {
 
     static modify = async (id, data) => {
         try {
-            const album = await albumModel.findOneAndUpdate(id);
+            const album = await albumModel.findByIdAndUpdate(id, data, { new: true });
             return album
         } catch (error) {
             return error;
         }
     }
 
-    static remove = async (id, data) => {
+    static remove = async (id) => {
         try {
-            const album = await albumModel.findOneAndRemove(id);
+            const album = await albumModel.findByIdAndRemove(id);
             return album
         } catch (error) {
             return error;

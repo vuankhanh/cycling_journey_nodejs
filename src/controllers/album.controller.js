@@ -9,6 +9,7 @@ const writeBufferToFile = require('../helpers/write.buffer.to.file');
 const replaceToVietnamese = require('../helpers/replace.to.vietnamese');
 
 const multipleUploadMiddleware = require("../middlewares/multiple.upload.middleware");
+const { BadRequestError } = require('../core/error.response');
 
 class AlbumController{
     create = async(req, res, next)=>{
@@ -31,7 +32,6 @@ class AlbumController{
                     }
                     const parseIntIsMain = parseInt(req.body.isMain) | 0;
                     let isMain = parseIntIsMain > files.length-1 ? 0 : parseIntIsMain;
-                    console.log(files);
                     for(let [index, file] of files.entries()){
                         let objMediaPath = {
                             relativeUrl: '',
@@ -42,8 +42,6 @@ class AlbumController{
                             imageAfterResizing = imageAfterResizing.replace(/\\/g,"/");
                             let buffer = await proccessImage.thumbnail(imageAfterResizing);
                             let absoluteUrlThumbnail = writeBufferToFile.thumbnail(imageAfterResizing, buffer).replace(/\\/g,"/");
-                            console.log('ra file thumbnail ntn:...');
-                            console.log(absoluteUrlThumbnail);
                             objMediaPath.relativeUrl = imageAfterResizing.replace(localPathConfig.album, '');
                             objMediaPath.relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.album, '');    
                         }else{
@@ -74,7 +72,8 @@ class AlbumController{
                 }
             }
             
-        } catch (error) {
+        } catch (err) {
+            const error = new BadRequestError(err.message, 400)
             next(error)
         }
     }
@@ -88,7 +87,8 @@ class AlbumController{
                 message: 'success',
                 metaData: await AlbumService.getAll(page, size)
             }).send(res);
-        } catch (error) {
+        } catch (err) {
+            const error = new BadRequestError(err.message, 400)
             next(error)
         }
     }
@@ -100,7 +100,8 @@ class AlbumController{
                 message: 'success',
                 metaData: await AlbumService.getDetail(route)
             }).send(res);
-        } catch (error) {
+        } catch (err) {
+            const error = new BadRequestError(err.message, 400)
             next(error)
         }
     }
@@ -109,7 +110,8 @@ class AlbumController{
         try {
             req.params.id
             return res.status(200).json(await AlbumService.replace());
-        } catch (error) {
+        } catch (err) {
+            const error = new BadRequestError(err.message, 400)
             next(error)
         }
     }
@@ -118,7 +120,8 @@ class AlbumController{
         try {
             req.params.id
             return res.status(200).json(await AlbumService.modify());
-        } catch (error) {
+        } catch (err) {
+            const error = new BadRequestError(err.message, 400)
             next(error)
         }
     }
@@ -127,7 +130,8 @@ class AlbumController{
         try {
             req.params.id
             return res.status(200).json(await AlbumService.remove());
-        } catch (error) {
+        } catch (err) {
+            const error = new BadRequestError(err.message, 400)
             next(error)
         }
     }

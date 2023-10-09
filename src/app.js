@@ -20,5 +20,24 @@ require('./dbs/init.mongodb');
 // init routes
 app.use('/api', require('./routes'));
 app.use('/static', express.static(localPathConfig.album))
+
 // handle error
+app.use((req, res, next)=>{
+    const error = new Error(`Can't find ${req.originalUrl} on the server`);
+    error.status = 'fail';
+    error.status = 404;
+
+    next(error);
+})
+
+app.use((error, req, res, next)=>{
+    const status = error.status || 'error';
+    const statusCode = error.status || 500;
+    return res.status(statusCode).json({
+        status: status,
+        message: error.message || 'Interal Server Error'
+    })
+})
+
+
 module.exports = app;

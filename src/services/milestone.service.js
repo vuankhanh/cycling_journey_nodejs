@@ -4,14 +4,9 @@ const milestoneModel = require('../models/milestone.model');
 
 class MilestoneService {
     static create = async (data)=>{
-        try {
-            const milestone = new milestoneModel(data);
-            await milestone.save();
-            return milestone
-        } catch (error) {
-            console.error(error);
-            return error;
-        }
+        const milestone = new milestoneModel(data);
+        await milestone.save();
+        return milestone;
     }
 
     static getAll = async ()=>{
@@ -34,30 +29,21 @@ class MilestoneService {
 
     static replace = async (id, data)=>{
         try {
-
-            const milestone = await milestoneModel.findOneAndReplace(id);
-            return milestone
+            const milestone = await milestoneModel.findByIdAndReplace(id, data);
+            return milestone;
         } catch (error) {
             return error;
         }
     }
 
     static modify = async (id, data)=>{
-        try {
-            const milestone = await milestoneModel.findOneAndUpdate(id);
-            return milestone
-        } catch (error) {
-            return error;
-        }
+        const milestone = await milestoneModel.findByIdAndUpdate(id, data);
+        return milestone
     }
 
     static remove = async (id, data)=>{
-        try {
-            const milestone = await milestoneModel.findOneAndRemove(id);
-            return milestone
-        } catch (error) {
-            return error;
-        }
+        const milestone = await milestoneModel.findOneAndRemove(id);
+        return milestone
     }
 }
 

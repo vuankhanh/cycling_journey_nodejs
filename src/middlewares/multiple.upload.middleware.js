@@ -15,30 +15,38 @@ let storage = multer.diskStorage({
     destination: async(req, file, callback) => {
         let urlRoute = req.baseUrl + req.path;
         let query = req.query;
-        let albumFolder;
-        switch(urlRoute){
-            case '/api/album/':
-                if(req.method === 'POST'){
-                    let count = await imageAlbumService.checkExistAlbum(query.name);
-                    if(count){
-                        return callback({ code: 11000 }, null);
-                    }
-                }
-                albumFolder = 'posts-album';
-                break;
-            default: 
-                albumFolder = 'other';
-                let error = {
-                    code: 'UNSOPPORTED_FILE',
-                    message: 'This route does not support files'
-                }
-                return callback(error, null);
-        }
-
         try {
-            fse.ensureDirSync(localPathConfig.album+'/'+albumFolder+'/'+replaceToVietnamese(query.name));
-            return callback(null, localPathConfig.album+'/'+albumFolder+'/'+replaceToVietnamese(query.name));
-            
+            switch(urlRoute){
+                case '/api/album/':
+                    if(req.method === 'POST'){
+                        let count = await imageAlbumService.checkExistAlbum(query.name);
+                        if(count){
+                            return callback({ code: 11000 }, null);
+                        }
+                        const albumFolder = 'cycling-journey-album';
+                        const relativePath = albumFolder+'/'+replaceToVietnamese(query.name);
+                        const absolutePath = localPathConfig.album+'/'+relativePath;
+                        req.customParams = {};
+                        req.customParams.relativePath = relativePath;
+                        fse.ensureDirSync(absolutePath);
+                        return callback(null, absolutePath);
+                    }
+                    break;
+                case '/api/album/'+req.params.id: 
+                    if(req.method === 'PATCH'){
+                        const relativePath = req.customParams?.relativePath;
+                        const absolutePath = localPathConfig.album+'/'+relativePath;
+                        fse.ensureDirSync(absolutePath);
+                        return callback(null, absolutePath);
+                    }
+                    break;
+                default: 
+                    let error = {
+                        code: 'UNSOPPORTED_FILE',
+                        message: 'This route does not support files'
+                    }
+                    return callback(error, null);
+            }
         } catch (error) {
             return callback(null, error);
         }

@@ -52,7 +52,11 @@ const albumSchema = new mongoose.Schema({
     },
     media: [{
         type: mediaSchema
-    }]
+    }],
+    relativePath: {
+        type: String,
+        required: true
+    }
 }, {
     timestamps: true,
     collection: 'album'

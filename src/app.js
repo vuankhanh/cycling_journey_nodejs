@@ -12,7 +12,7 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(compression());
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // init db
 require('./dbs/init.mongodb');

@@ -1,8 +1,16 @@
 'use strict'
-
+const mongoose = require('mongoose');
 const albumModel = require('../models/album.model');
 
 class AlbumService {
+    constructor(){
+        
+    }
+    static basicGetOne = async (id) => {
+        const album = await albumModel.findById(id);
+        return album;
+    }
+
     static create = async (data) => {
         try {
             const album = new albumModel(data);
@@ -20,7 +28,7 @@ class AlbumService {
                         $limit: 1
                     }
                 ]
-            ).then(res=>{
+            ).then(res => {
                 return res[0]
             });
             return albumsAggregate;
@@ -62,27 +70,7 @@ class AlbumService {
     }
 
     static getDetail = async (conditional) => {
-        try {
-            const albumsAggregate = await albumModel.aggregate(
-                [
-                    {
-                        $match: conditional
-                    }, {
-                        $addFields: {
-                            mediaItems: { $sum: { $size: "$media" } }
-                        }
-                    }, {
-                        $limit: 1
-                    }
-                ]
-            ).then(res=>{
-                return res[0]
-            });
-
-            return albumsAggregate;
-        } catch (error) {
-            return error;
-        }
+        return await tranformToDetaiData(conditional);
     }
 
     static replace = async (id, data) => {
@@ -95,12 +83,33 @@ class AlbumService {
     }
 
     static modify = async (id, data) => {
-        try {
-            const album = await albumModel.findByIdAndUpdate(id, data, { new: true });
-            return album
-        } catch (error) {
-            return error;
+        const updateQuery = { ...data };
+        const arrPromise = [];
+
+        if (data.newFiles?.length) {
+            updateQuery.$push = {
+                media: { $each: data.newFiles }
+            }
         }
+        const updateAlbum = albumModel.findByIdAndUpdate(id, updateQuery, { safe: true, new: true });
+        arrPromise.push(updateAlbum);
+
+        if (data.filesWillRemove?.length) {
+            const removeValueQuery = {
+                $pull: {
+                    media: { _id: { $in: data.filesWillRemove } }
+                }
+            }
+            const removeItem = albumModel.findByIdAndUpdate(id, removeValueQuery, { safe: true, new: true });
+            arrPromise.push(removeItem);
+        }
+        // const mediasWillRemoveOperator = mediasWillRemove?.length ? { $pullAll: { media: mediasWillRemove } } : {};
+        // const updateQuery = {...data, ...mediasWillRemoveOperator };
+        await Promise.all(arrPromise);
+        const conditional = { _id: new mongoose.Types.ObjectId(id) };
+        const album = await tranformToDetaiData(conditional);
+        console.log(album);
+        return album;
     }
 
     static remove = async (id) => {
@@ -111,6 +120,24 @@ class AlbumService {
             return error;
         }
     }
+}
+
+const tranformToDetaiData = async(conditional)=>{
+    return await albumModel.aggregate(
+        [
+            {
+                $match: conditional
+            }, {
+                $addFields: {
+                    mediaItems: { $sum: { $size: "$media" } }
+                }
+            }, {
+                $limit: 1
+            }
+        ]
+    ).then(res => {
+        return res[0]
+    });
 }
 
 module.exports = AlbumService;

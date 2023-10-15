@@ -60,7 +60,6 @@ const albumSchema = new mongoose.Schema({
 }, {
     timestamps: true,
     collection: 'album'
-}
-)
+})
 
 module.exports = mongoose.model("schema_album", albumSchema);

@@ -17,14 +17,16 @@ class AlbumController {
         try {
             if (!query || !query.name) {
                 const error = new BadRequestError('Missing parameter', 400)
-                next(error)
+                next(error);
+                return;
             } else {
                 await multipleUploadMiddleware(req, res);
                 const body = req.body;
                 const files = req.files;
                 if (!files || !files.length) {
                     const error = new BadRequestError('Missing parameter', 400)
-                    next(error)
+                    next(error);
+                    return;
                 } else {
                     let objAlbum = {
                         name: query.name,
@@ -79,6 +81,7 @@ class AlbumController {
         } catch (err) {
             const error = new BadRequestError(err.message, 500)
             next(error)
+            return
         }
     }
 
@@ -91,6 +94,7 @@ class AlbumController {
                 message: 'success',
                 metaData: await AlbumService.getAll(page, size)
             }).send(res);
+            return;
         } catch (err) {
             const error = new BadRequestError(err.message, 500)
             next(error)

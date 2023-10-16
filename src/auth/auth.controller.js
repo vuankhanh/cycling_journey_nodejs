@@ -35,6 +35,16 @@ class AuthController {
             metaData: await tokenUtil.generateToken(account)
         }).send(res);
     }
+
+    config = async(req, res, next)=>{
+        const config = {
+            serverTime: Date.now()
+        }
+        new OK({
+            message: 'success',
+            metaData: config
+        }).send(res);
+    }
 }
 
 module.exports = new AuthController()

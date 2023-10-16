@@ -4,11 +4,17 @@ const compression = require('compression');
 const express = require('express');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
+// const cors = require('cors');
 const localPathConfig = require('./configs/local_dir');
 
 const app = express();
 
 // init middlewares
+// app.use(cors({
+//     origin: 'http://localhost:4200'
+// }), (req, res, next) => {
+//     res.json({ msg: 'This is CORS-enabled for only http://localhost:4200.' })
+// })
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(compression());
@@ -23,7 +29,7 @@ app.use('/api', require('./routes'));
 app.use('/static', express.static(localPathConfig.album))
 
 // handle error
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
     const error = new Error(`Can't find ${req.originalUrl} on the server`);
     error.status = 'fail';
     error.status = 404;
@@ -31,7 +37,7 @@ app.use((req, res, next)=>{
     next(error);
 })
 
-app.use((error, req, res, next)=>{
+app.use((error, req, res, next) => {
     const status = error.status || 'error';
     const statusCode = error.status || 500;
     return res.status(statusCode).json({

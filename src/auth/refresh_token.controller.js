@@ -12,7 +12,7 @@ class RefreshTokenController {
         const body = req.body;
         const { error } = validationSchemaUtil.refreshTokenBodyValidation(body);
         if(error){
-            const newError = new BadRequestError(error.details[0].message, 400);
+            const newError = new BadRequestError(error.details[0].message, 403);
             next(newError);
             return;
         }
@@ -28,7 +28,7 @@ class RefreshTokenController {
                 metaData: { accessToken }
             }).send(res);
         } catch (error) {
-            const newError = new BadRequestError(error.message, 400);
+            const newError = new BadRequestError(error.message, 401);
             next(newError);
             return;
         }

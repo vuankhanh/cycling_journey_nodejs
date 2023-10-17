@@ -34,7 +34,6 @@ class MilestoneController{
     getDetail = async(req, res, next)=>{
         try {
             const id = req.params.id;
-            console.log(`id: ${id}`);
             new OK({
                 message: 'success',
                 metaData: await MilestoneService.getDetail(id)

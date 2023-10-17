@@ -3,9 +3,6 @@ const mongoose = require('mongoose');
 const albumModel = require('../models/album.model');
 
 class AlbumService {
-    constructor(){
-        
-    }
     static basicGetOne = async (id) => {
         const album = await albumModel.findById(id);
         return album;

@@ -6,7 +6,7 @@ const router = express.Router();
 const isAuth = require('../../middlewares/auth.middleware');
 const MilestoneController = require('../../controllers/milestone.controller');
 
-router.post('',isAuth , MilestoneController.create);
+router.post('', isAuth, MilestoneController.create);
 router.get('', MilestoneController.getAll);
 router.get('/:id', MilestoneController.getDetail);
 router.put('/:id', isAuth, MilestoneController.replace);

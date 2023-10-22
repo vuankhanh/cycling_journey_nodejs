@@ -17,7 +17,9 @@ app.use(cors({
 }));
 
 app.use(morgan(process.env.NODE_ENV === 'pro' ? 'tiny' : 'dev'));
-app.use(helmet());
+app.use(helmet({
+    crossOriginEmbedderPolicy: false,
+}));
 app.use(compression());
 
 app.use(bodyParser.json());

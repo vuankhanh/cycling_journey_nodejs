@@ -1,5 +1,7 @@
 'use strict'
 const mongoose = require('mongoose');
+const fse = require('fs-extra');
+const localPathConfig = require('../configs/local_dir');
 const albumModel = require('../models/album.model');
 
 class AlbumService {
@@ -100,12 +102,9 @@ class AlbumService {
             const removeItem = albumModel.findByIdAndUpdate(id, removeValueQuery, { safe: true, new: true });
             arrPromise.push(removeItem);
         }
-        // const mediasWillRemoveOperator = mediasWillRemove?.length ? { $pullAll: { media: mediasWillRemove } } : {};
-        // const updateQuery = {...data, ...mediasWillRemoveOperator };
         await Promise.all(arrPromise);
         const conditional = { _id: new mongoose.Types.ObjectId(id) };
         const album = await tranformToDetaiData(conditional);
-        console.log(album);
         return album;
     }
 

@@ -56,7 +56,7 @@ let storage = multer.diskStorage({
         // Mình ví dụ chỉ cho phép tải lên các loại ảnh png & jpg
         // console.log(file);
         let query = req.query;
-        let math = ['image/png', 'image/jpeg', 'video/mp4', 'video/quicktime'];
+        let math = ['image/png', 'image/jpeg', 'video/mp4', 'video/quicktime', 'video/webm'];
         if (math.indexOf(file.mimetype) === -1) {
             let error = {
                 code: 'INVALID_IMAGE_FORMAT',

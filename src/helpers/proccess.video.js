@@ -1,5 +1,7 @@
 "use strict";
 
+const fse = require('fs-extra');
+
 const
     ffmpegPath = require("@ffmpeg-installer/ffmpeg").path,
     ffprobePath = require("@ffprobe-installer/ffprobe").path,
@@ -17,7 +19,7 @@ function generateThumbnail(videoPath, fileName) {
             .thumbnail({
                 timestamps: ['50%'],
                 filename: thumbnailName,
-                size: '1920x1080',
+                size: '400x225',
                 folder: videoPath
             })
             .on('end', function (res) {
@@ -30,11 +32,31 @@ function generateThumbnail(videoPath, fileName) {
         
 }
 
-module.exports = generateThumbnail;
+function convert(videoPath, fileName){
+    return new Promise((resolve, reject)=>{
+        const path = videoPath+'/'+fileName;
+        const destination = videoPath+'/'+fileName.split('.')[0]+'.webm';
 
-// generateThumbnail('./output', 'Chỉ tình thương ở lại.mp4')
-//     .then((res) => {
-//         console.log('Screenshots taken');
-//         console.log(res);
-//     })
-//     .catch((err) => console.error(err));
+        const outputWebmOption = ['-f', 'webm','-c:v', 'libvpx-vp9', '-b:v', '1M', '-acodec', 'libvorbis'];
+        const outputMp4Option = ['-f', 'mp4', '-c:v', 'libx265'];
+        ffmpeg(path)
+            .output(destination)
+            .outputOptions(
+                outputWebmOption
+            )
+            .on('end', function (res) {
+                console.log(res);
+                resolve(destination);
+                fse.unlinkSync(path);
+            })
+            .on('error', (error)=>{
+                console.log(error);
+                reject(error)
+            }).run();
+    })
+}
+
+module.exports = {
+    generateThumbnail,
+    convert
+}

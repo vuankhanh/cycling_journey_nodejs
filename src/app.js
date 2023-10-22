@@ -4,17 +4,18 @@ const compression = require('compression');
 const express = require('express');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
-// const cors = require('cors');
+const cors = require('cors');
 const localPathConfig = require('./configs/local_dir');
 
 const app = express();
-
+const frontEndDomain = process.env.NODE_ENV === 'pro' ? process.env.PRO_FRONT_END_DOMAIN : process.env.DEV_FRONT_END_DOMAIN
+const arrFrontEndDomain = frontEndDomain.split(' ');
+console.log(arrFrontEndDomain);
 // init middlewares
-// app.use(cors({
-//     origin: 'http://localhost:4200'
-// }), (req, res, next) => {
-//     res.json({ msg: 'This is CORS-enabled for only http://localhost:4200.' })
-// })
+app.use(cors({
+    origin: arrFrontEndDomain
+}));
+
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(compression());
@@ -38,6 +39,8 @@ app.use((req, res, next) => {
 })
 
 app.use((error, req, res, next) => {
+
+    console.log(error);
     const status = error.status || 'error';
     const statusCode = error.status || 500;
     return res.status(statusCode).json({

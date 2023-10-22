@@ -13,7 +13,10 @@ const arrFrontEndDomain = frontEndDomain.split(' ');
 console.log(arrFrontEndDomain);
 // init middlewares
 app.use(cors({
-    origin: arrFrontEndDomain
+    origin: arrFrontEndDomain,
+    methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+    header: 'X-Requested-With, content-type',
+    credentials: true
 }));
 
 app.use(morgan(process.env.NODE_ENV === 'pro' ? 'tiny' : 'dev'));

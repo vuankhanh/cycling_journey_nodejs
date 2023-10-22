@@ -16,7 +16,7 @@ app.use(cors({
     origin: arrFrontEndDomain
 }));
 
-app.use(morgan('dev'));
+app.use(morgan(process.env.NODE_ENV === 'pro' ? 'tiny' : 'dev'));
 app.use(helmet());
 app.use(compression());
 

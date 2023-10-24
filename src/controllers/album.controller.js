@@ -51,9 +51,10 @@ class AlbumController {
                             objMediaPath.relativeUrl = imageAfterResizing.replace(localPathConfig.album, '');
                             objMediaPath.relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.album, '');
                         } else {
-                            const absoluteUrlThumbnail = await processVideo(file.destination, file.filename);
+                            const absoluteUrlThumbnail = await generateThumbnail(file.destination, file.filename);
+                            const relativeUrl = await convert(file.destination, file.filename);
                             objMediaPath.relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.album, '')
-                            objMediaPath.relativeUrl = file.path.replace(/\\/g, "/").replace(localPathConfig.album, '');
+                            objMediaPath.relativeUrl = relativeUrl.replace(/\\/g,"/").replace(localPathConfig.album, '');
                         }
 
                         let objMedia = {
@@ -191,7 +192,6 @@ class AlbumController {
                     }else{
                         const absoluteUrlThumbnail = await generateThumbnail(file.destination, file.filename);
                         const relativeUrl = await convert(file.destination, file.filename);
-                        console.log('relativeUrl: ', relativeUrl);
                         objMediaPath.relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.album, '')
                         objMediaPath.relativeUrl = relativeUrl.replace(/\\/g,"/").replace(localPathConfig.album, '');
                     }

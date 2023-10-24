@@ -4,20 +4,9 @@ const compression = require('compression');
 const express = require('express');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
-const cors = require('cors');
 const localPathConfig = require('./configs/local_dir');
 
 const app = express();
-const frontEndDomain = process.env.NODE_ENV === 'pro' ? process.env.PRO_FRONT_END_DOMAIN : process.env.DEV_FRONT_END_DOMAIN
-const arrFrontEndDomain = frontEndDomain.split(' ');
-console.log(arrFrontEndDomain);
-// init middlewares
-app.use(cors({
-    origin: arrFrontEndDomain,
-    methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-    header: 'X-Requested-With, content-type',
-    credentials: true
-}));
 
 app.use(morgan(process.env.NODE_ENV === 'pro' ? 'tiny' : 'dev'));
 app.use(helmet({

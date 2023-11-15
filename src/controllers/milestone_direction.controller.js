@@ -10,7 +10,7 @@ const { BadRequestError, InternalServerError } = require('../core/error.response
 class MilestoneDirectionController {
     update = async (req, res, next) => {
         try {
-            const milestones = await milestoneService.getAll().sort({numericalOrder: 1});
+            const milestones = await milestoneService.getAll();
             const arrSelectives = CoordinateMilestoneHelper.coordinatesInOrderSelective(milestones);
             new OK({
                 message: 'success',

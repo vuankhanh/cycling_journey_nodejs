@@ -9,7 +9,8 @@ const illustration = {
 async function resize(url){
     let destinationImage = changeFileExtension(url, 'webp');
     await sharp(url)
-    .resize(illustration)
+    .rotate()
+    .resize(illustration.width, illustration.height)
     .webp()
     .toFile(destinationImage);
 

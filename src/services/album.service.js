@@ -128,6 +128,16 @@ const tranformToDetaiData = async(conditional)=>{
                     mediaItems: { $sum: { $size: "$media" } }
                 }
             }, {
+                $replaceWith: {
+                    $setField: {
+                        field: "media",
+                        input: "$$ROOT",
+                        value: {
+                            $sortArray: { input: "$media", sortBy: { type: 1 } }
+                        }
+                    }
+                }
+            }, {
                 $limit: 1
             }
         ]

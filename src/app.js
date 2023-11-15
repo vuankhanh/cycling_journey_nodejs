@@ -33,15 +33,14 @@ app.use((req, res, next) => {
 })
 
 app.use((error, req, res, next) => {
-
-    console.log(error);
     const status = error.status || 'error';
     const statusCode = error.status || 500;
+    const message = error.message || 'Interal Server Error'
+
     return res.status(statusCode).json({
-        status: status,
-        message: error.message || 'Interal Server Error'
+        status,
+        message
     })
 })
-
 
 module.exports = app;

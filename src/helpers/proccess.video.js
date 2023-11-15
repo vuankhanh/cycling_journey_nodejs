@@ -1,7 +1,10 @@
 "use strict";
 
 const fse = require('fs-extra');
+const cliProgress = require('cli-progress');
 
+// create a new progress bar instance and use shades_classic theme
+const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 const
     ffmpegPath = require("@ffmpeg-installer/ffmpeg").path,
     ffprobePath = require("@ffprobe-installer/ffprobe").path,
@@ -33,6 +36,8 @@ function generateThumbnail(videoPath, fileName) {
 }
 
 function convert(videoPath, fileName){
+    // start the progress bar with a total value of 200 and start value of 0
+    bar.start(100, 0);
     return new Promise((resolve, reject)=>{
         const path = videoPath+'/'+fileName;
         const destination = videoPath+'/'+fileName.split('.')[0]+'.webm';
@@ -43,15 +48,22 @@ function convert(videoPath, fileName){
             .output(destination)
             .outputOptions(
                 outputWebmOption
-            )
+            ).on('progress', (progress)=>{
+                // update the current value in your application..
+                bar.update(progress.percent);
+            })
             .on('end', function (res) {
                 console.log(res);
                 resolve(destination);
                 fse.unlinkSync(path);
+                // stop the progress bar
+                bar.stop();
             })
             .on('error', (error)=>{
                 console.log(error);
                 reject(error)
+                // stop the progress bar
+                bar.stop();
             }).run();
     })
 }

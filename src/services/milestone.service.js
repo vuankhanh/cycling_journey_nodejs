@@ -11,7 +11,7 @@ class MilestoneService {
 
     static getAll = async ()=>{
         try {
-            const milestones = await milestoneModel.find().lean();
+            const milestones = await milestoneModel.find().sort({numericalOrder: 1}).lean();
             return milestones
         } catch (error) {
             return error;

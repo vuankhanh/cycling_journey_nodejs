@@ -72,7 +72,7 @@ let storage = multer.diskStorage({
 });
 // Khởi tạo middleware uploadManyFiles với cấu hình như ở trên,
 // Bên trong hàm .array() truyền vào name của thẻ input, ở đây mình đặt là "many-files", và tham số thứ hai là giới hạn số file được phép upload mỗi lần
-let uploadManyFiles = multer({storage: storage}).array("many-files", 15);
+let uploadManyFiles = multer({storage: storage}).array("many-files", 150);
 
 // Mục đích của util.promisify() là để bên controller có thể dùng async-await để gọi tới middleware này
 let multipleUploadMiddleware = util.promisify(uploadManyFiles);

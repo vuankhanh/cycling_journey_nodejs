@@ -27,11 +27,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm i
-      working-directory: /var/www/back-end
+      working-directory: /var/www/back-end/cycling_journey_nodejs
     - run: npm install pm2@latest -g #install pm2 global
     - run: pm2 -V #check pm2 version
     - run: pm2 list #check pm2 list
     #running pm2 in mode cluster and --watch set to auto restart if index.js have changes.
-    - run: pm2 start npm unix_prod --watch -i max
-      working-directory: /var/www/back-end
+    - run: pm2 start "npm run unix_prod" --name Cycling_Journey" --watch -i max
+      working-directory: /var/www/back-end/cycling_journey_nodejs
       

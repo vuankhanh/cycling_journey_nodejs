@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -31,5 +31,5 @@ jobs:
     - run: pm2 -V #check pm2 version
     - run: pm2 list #check pm2 list
     #running pm2 in mode cluster and --watch set to auto restart if index.js have changes.
-    - run: pm2 start npm unix_prod --watch -i
+    - run: pm2 start npm unix_prod --watch -i max
       

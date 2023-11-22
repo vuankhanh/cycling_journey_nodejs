@@ -2,12 +2,14 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
+const cors = require('cors')
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
 const localPathConfig = require('./configs/local_dir');
 
 const app = express();
 
+app.use(cors());
 app.use(morgan(process.env.NODE_ENV === 'pro' ? 'tiny' : 'dev'));
 app.use(helmet({
     crossOriginEmbedderPolicy: false,

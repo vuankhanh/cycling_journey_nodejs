@@ -36,4 +36,4 @@ jobs:
     - name: Delete cycling_journey_nodejs in silent
       run: pm2 delete --silent cycling_journey_nodejs
     - name: Start cycling_journey_nodejs
-      run: pm2 start "npm run unix_prod" 
+      run: pm2 start "npm run unix_prod" --name cycling_journey_nodejs

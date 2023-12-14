@@ -1,0 +1,39 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: [self-hosted, production]
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - name: Create .env file
+      run: echo "${{ secrets.ENV_FILE }}" > .env
+    - name: Check pm2 version
+      run: pm2 -V
+    - name: Check pm2 list
+      run: pm2 list
+    - name: Delete cycling_journey_nodejs in silent
+      run: pm2 delete --silent cycling_journey_nodejs
+    - name: Start cycling_journey_nodejs
+      run: pm2 start "npm run unix_prod" 

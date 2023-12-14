@@ -35,5 +35,8 @@ jobs:
       run: pm2 list
     - name: Delete cycling_journey_nodejs in silent
       run: pm2 delete --silent cycling_journey_nodejs
+      continue-on-error: true
     - name: Start cycling_journey_nodejs
       run: pm2 start "npm run unix_prod" --name cycling_journey_nodejs
+    - name: Save pm2 script to synchronize
+      run: pm2 save

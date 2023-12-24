@@ -17,9 +17,10 @@ class Database {
             mongoose.set('debug', { color: true });
         }
 
-        mongoose.connect(connectString).then(_=>console.log(`Connected Mongodb Success`))
+        mongoose.connect(connectString)
+        .then(_=>console.log(`\x1b[32mSuccessfully connected to Mongodb`))
         .catch(err=>{
-            console.log(`Error Connect`);
+            console.log(`\x1b[31mError connecting to Mongodb`);
             console.error(err);
         });
     }
